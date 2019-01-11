@@ -1,0 +1,51 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="battery-component">
+    <template>
+        <style>
+            :host{
+                display: block;
+            }
+            h2{
+                text-align: left;
+                font-size:12px;
+                margin: 0px;
+                margin-right:5px;
+             }
+            .pila{
+                width: 10%;
+                padding-left: 20px;         
+                background-color: green;
+                border-radius: 8px;
+             }
+        </style>
+        <div class="pila">
+            <h2>[[lowBattery]]%</h2>
+        </div>
+    </template>
+    <script>
+        class BatteryComponent extends Polymer.Element{
+            static get is(){return 'battery-component'}
+            static get properties() {
+                return{
+                    lowBattery: {
+                        type: Number,
+                        value: 101
+                    },
+                    low: {
+                        type: Number,
+                        value: 0,
+                        observer: '_low'
+                    }    
+                }
+            }
+            _low() {
+                if (this.lowBattery > 0) {
+                    this.set("lowBattery", this.lowBattery - 1)
+                    console.log(this.lowBattery)
+                }
+            }
+        }
+        window.customElements.define(BatteryComponent.is, BatteryComponent)
+    </script>
+</dom-module>

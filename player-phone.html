@@ -1,0 +1,63 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="player-phone">
+    <template>
+        <style>
+            :host{
+                display: block;
+            }
+            .image{
+                width: 300px;
+                border-radius: 10px;
+                box-shadow: 5px 5px rgba(32, 1, 1, 0.836);
+            }
+            #music{
+                padding-left: 120px;
+                padding-top: 50px;
+                
+            }
+        </style>
+        <div id="music">
+            <img src="/music/37.jpg" class="image">
+            <audio id="play" controls>
+                <source src="/music/ALERTA SISMICA DJ YUNKY.mp3" type="audio/mp3">
+            </audio>
+        </div>
+    </template>
+    <script>
+        class PlayerPhone extends Polymer.Element{
+            static get is(){return 'player-phone'}
+            static get properties(){
+                return{
+                    lowBattery:{
+                        charge: Number,
+                        value: 10
+                    }
+                }
+            }
+            ready(){
+                super.ready();
+                this.getMusic();
+            }
+
+            getMusic(){
+                let music = this.$.play;
+                music.ontimeupdate = () => {
+                    this.set("lowBattery", Math.round(music.currentTime))
+                    this._destroyBattery()
+                    
+                }
+            }
+            _destroyBattery(){
+                this.dispatchEvent(new CustomEvent('low-battery', {
+                    bubbles: false,
+                    composed: false,
+                    detail: {
+                        value: this.lowBattery
+                    }
+                }));
+            }
+        }
+        window.customElements.define(PlayerPhone.is, PlayerPhone);
+    </script>
+</dom-module>

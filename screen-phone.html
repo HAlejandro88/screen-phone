@@ -1,0 +1,53 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="./player-phone.html">
+<link rel="import" href="./battery-component.html">
+<link rel="stylesheet" href="/fonts/style.css">
+
+<dom-module id="screen-phone">
+  <template>
+    <style>
+      :host {
+        display: block;
+        height:350px;
+        width: 550px;
+        background:rgb(150, 197, 224);
+        padding: 20px 11px;
+        margin: auto;
+        border-radius: 30px;
+        border:10px solid black;
+      }
+     
+    </style>
+    <header>
+      <battery-component low="[[batery]]"></battery-component>
+    </header>
+    <player-phone on-low-battery="Battery"></player-phone>
+  </template>
+
+  <script>
+    /**
+     * `screen-phone`
+     * 
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class ScreenPhone extends Polymer.Element {
+      static get is() { return 'screen-phone'; }
+      static get properties() {
+        return {
+          battery: {
+            type: Number,
+            value: 0
+          }
+        };
+      }
+      Battery(event) {
+        this.set("batery", event.detail.value)
+      }
+    }
+
+    window.customElements.define(ScreenPhone.is, ScreenPhone);
+  </script>
+</dom-module>

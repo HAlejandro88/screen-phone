@@ -1,27 +1,73 @@
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="./player-phone.html">
 <link rel="import" href="./battery-component.html">
-<link rel="stylesheet" href="/fonts/style.css">
+<link rel="import" href="../paper-button/paper-button.html">
 
 <dom-module id="screen-phone">
   <template>
     <style>
       :host {
         display: block;
-        height:350px;
+        min-height:350px;
         width: 550px;
         background:rgb(150, 197, 224);
         padding: 20px 11px;
         margin: auto;
         border-radius: 30px;
         border:10px solid black;
+        /*overflow: scroll;*/
+      }
+      .cuadro{
+        width: 80px;
+        height: 80px;
+        border: 1px solid black;
+        background-image: url("https://previews.123rf.com/images/faysalfarhan/faysalfarhan1502/faysalfarhan150200884/36475951-icono-de-la-m%C3%BAsica-bot%C3%B3n-azul-vidrioso.jpg");
+        background-size: cover;
+        margin-right: 10px;
+      }
+      .content{
+        display:flex;
+        padding-left: 120px;
+        padding-top: 100px;
+      }
+      .image{
+        display: none;
+      }
+      .music{
+        display: none;
+      }
+      .galery{
+        width: 80px;
+        height: 80px;
+        border: 1px solid black;
+        background-image: url("data:image/png;base64,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");
+        background-size: cover;
+        margin-right: 10px;
+      }
+      .correo{
+        width: 80px;
+        height: 80px;
+        border: 1px solid black;
+        background-image: url("https://st2.depositphotos.com/2398103/5729/v/950/depositphotos_57292869-stock-illustration-email-blue-icon.jpg");
+        background-size: cover;
       }
      
     </style>
     <header>
       <battery-component low="[[batery]]"></battery-component>
     </header>
-    <player-phone on-low-battery="Battery"></player-phone>
+    <div class="content">
+        <div id="apmuse">
+          <paper-button on-tap="high" class="cuadro"></paper-button>
+        </div>
+        <div class="galery" id="gal">
+          <img src="/music/37.jpg" class="image">
+        </div>
+        <div class="correo" id="ema"></div>
+    </div>
+    <div class="music" id="muse">
+        <player-phone on-low-battery="Battery"></player-phone>
+    </div>
   </template>
 
   <script>
@@ -45,6 +91,16 @@
       }
       Battery(event) {
         this.set("batery", event.detail.value)
+      }
+      high(){
+        let musica = this.$.muse;
+        musica.style.display = "block";
+        let ap = this.$.apmuse;
+        ap.style.display ="none";
+        let em = this.$.ema;
+        em.style.display = "none";
+        let ga = this.$.gal;
+        ga.style.display = "none";
       }
     }
 

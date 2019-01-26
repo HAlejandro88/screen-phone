@@ -1,4 +1,7 @@
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../iron-icons/device-icons.html">
+<link rel="import" href="../iron-icons/hardware-icons.html">
 
 <dom-module id="battery-component">
     <template>
@@ -10,17 +13,31 @@
                 text-align: left;
                 font-size:12px;
                 margin: 0px;
-                margin-right:5px;
+                margin-right:2px;
+               
              }
             .pila{
-                width: 10%;
+               /* width: 10%;
                 padding-left: 20px;         
                 background-color: green;
-                border-radius: 8px;
+                border-radius: 8px;*/
+               display: inline-flex;
+               padding-left: 380px;
+               color:#061DDE;
+               padding-top: 0.2px;
+               font-size: 10px;
              }
         </style>
         <div class="pila">
-            <h2>[[lowBattery]]%</h2>
+            <iron-icon icon="hardware:headset"></iron-icon>
+            <iron-icon icon="device:brightness-high"></iron-icon>
+            <iron-icon icon="device:network-wifi"></iron-icon>
+            <iron-icon icon="device:network-cell"></iron-icon>
+            <iron-icon icon="device:bluetooth-disabled"></iron-icon>
+            <div>
+                <h2>[[lowBattery]]%</h2>
+            </div>
+            <iron-icon icon="{{chargeLow}}" style$="color:#{{colorLow}};"></iron-icon>
         </div>
     </template>
     <script>
@@ -36,6 +53,19 @@
                         type: Number,
                         value: 0,
                         observer: '_low'
+                    },
+                    chargeLow:{
+                        type:String,
+                        value:'device:battery-std',
+                    },
+                    colorLow:{
+                        type:String,
+                        value:'061DDE'
+                    },
+                    charge:{
+                        type:Number,
+                        value:'18',
+                        observer:'_high'
                     }    
                 }
             }
@@ -43,6 +73,42 @@
                 if (this.lowBattery > 0) {
                     this.set("lowBattery", this.lowBattery - 1)
                     console.log(this.lowBattery)
+                    if(this.lowBattery == 90){
+                        this.set("chargeLow","device:battery-90")
+                        console.log(this.chargeLow)
+                    }else if(this.lowBattery == 80){
+                        this.set("chargeLow","device:battery-80")
+                        console.log(this.chargeLow)
+                    } else if(this.lowBattery == 60){
+                        this.set("chargeLow","device:battery-60")
+                        console.log(this.chargeLow)
+                    } else if(this.lowBattery == 50){
+                        this.set("chargeLow","device:battery-50")
+                        console.log(this.chargeLow)
+                        this.set("colorLow","F3F005")
+                    } else if(this.lowBattery == 30){
+                        this.set("chargeLow","device:battery-30")
+                        console.log(this.chargeLow)
+                        this.set("colorLow","F3F005")
+                    }else if(this.lowBattery == 20){
+                        this.set("chargeLow","device:battery-20")
+                        console.log(this.chargeLow)
+                        this.set("colorLow","FA0505")
+                    }else if(this.lowBattery == 10){
+                        this.set("chargeLow","device:battery-alert")
+                        console.log(this.chargeLow)
+                        this.set("colorLow","FA0505")
+                    }
+                }
+
+            }
+            _high(){
+                if(this.lowBattery < 0){
+                    this.set("lowBattery", this.lowBattery + 1)
+                    console.log(this.lowBattery)
+                    this.set("chargeLow","device:battery-charging-20")
+                    console.log(this.chargeLow)
+                    this.set("colorLow","FA0505")   
                 }
             }
         }
